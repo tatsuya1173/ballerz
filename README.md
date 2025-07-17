@@ -140,3 +140,8 @@ php artisan migrate --seed
 php artisan storage:link
 
 php artisan serve
+
+##tips
+mysql -u ballerz_user -p -h 127.0.0.1 -P 3306 ballerz
+test1@test.com
+password
