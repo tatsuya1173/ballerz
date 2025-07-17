@@ -15,6 +15,16 @@ class Team extends Model
         return $this->belongsTo(Prefecture::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(TeamImage::class);
+    }
+
     protected $fillable = [
         'user_id',
         'prefecture_id',
@@ -28,5 +38,10 @@ class Team extends Model
     protected $casts = [
         'practice_days' => 'array',
     ];
+
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
+    }
     
 }

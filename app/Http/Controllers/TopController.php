@@ -13,7 +13,7 @@ class TopController extends Controller
 {
     public function index()
     {
-        $teams = Team::with('prefecture')->paginate(10);
+        $teams = Team::with('prefecture')->latest()->paginate(6);
         return view('top', compact('teams'));
     }
 }   
