@@ -19,9 +19,9 @@ class TeamFactory extends Factory
             'city' => $this->faker->city,
             'name' => $this->faker->company . ' FC',
             'grade_range' => $this->faker->randomElement(['1〜3年', '4〜6年', '全学年']),
-            'practice_days' => json_encode($this->faker->randomElements(
+            'practice_days' => $this->faker->randomElements(
                 ['月', '火', '水', '木', '金', '土', '日'], rand(2, 4)
-            )),
+            ),
             'introduction' => $this->faker->paragraph,
         ];
     }
