@@ -19,6 +19,8 @@ use App\Http\Controllers\TeamScheduleController;
 |
 */
 
+Route::get('/', [TopController::class, 'index'])->name('top');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -41,7 +43,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('/', [TopController::class, 'index'])->name('top');
 Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
 Route::get('/teams/{id}', [TeamController::class, 'show'])->name('teams.show');
 
