@@ -61,7 +61,7 @@
                     <h2 class="card-title">{{ $team->name }}</h2>
                     <p class="text-muted mb-2">📍 {{ $team->prefecture->name }} {{ $team->city }}</p>
                     <p><strong>対象学年:</strong> {{ $team->grade_range }}</p>
-                    <p><strong>練習日:</strong> {{ implode('・', $team->practice_days) }}</p>
+                    <p><strong>練習日:</strong> {{ implode('・', is_array($team->practice_days) ? $team->practice_days : json_decode($team->practice_days, true)) }}</p>
                     <hr>
                     <p class="mt-3">{{ $team->introduction }}</p>
                 </div>
