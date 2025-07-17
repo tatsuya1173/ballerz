@@ -17,7 +17,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('teams.update', $team->id) }}">
+    <form method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -73,6 +73,11 @@
         <div class="mb-4">
             <label for="introduction" class="form-label">チーム紹介</label>
             <textarea class="form-control" id="introduction" name="introduction" rows="5">{{ old('introduction', $team->introduction) }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="team_images" class="form-label">チーム画像（複数選択可）</label>
+            <input class="form-control" type="file" id="team_images" name="team_images[]" accept="image/*" multiple>
         </div>
 
         <button type="submit" class="btn btn-success w-100">更新する</button>

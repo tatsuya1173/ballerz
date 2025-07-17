@@ -26,6 +26,9 @@
                         @endforeach
                     </select>
 
+                    <h6 class="fw-bold">市区町村</h6>
+                    <input type="text" name="city" value="{{ request('city') }}" class="form-control mb-3" placeholder="例: 東京都千代田区">
+
                     <h6 class="fw-bold">対象学年</h6>
                     <select name="grade_range" class="form-select mb-3">
                         <option value="">選択してください</option>

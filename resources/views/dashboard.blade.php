@@ -43,6 +43,7 @@
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('teams.show', $team->id) }}" class="btn btn-sm btn-outline-secondary">詳細</a>
                                         <a href="{{ route('teams.edit', $team->id) }}" class="btn btn-sm btn-outline-secondary">編集</a>
+                                        <a href="{{ route('teams.schedules.index', $team->id) }}" class="btn btn-sm btn-outline-secondary">スケジュール</a>
                                     </div>
                                 </div>
                             </div>

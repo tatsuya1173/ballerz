@@ -17,7 +17,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('teams.store') }}">
+    <form method="POST" action="{{ route('teams.store') }}" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -69,6 +69,11 @@
         <div class="mb-4">
             <label for="introduction" class="form-label">チーム紹介</label>
             <textarea class="form-control" id="introduction" name="introduction" rows="5">{{ old('introduction') }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="team_images" class="form-label">チーム画像（複数選択可）</label>
+            <input class="form-control" type="file" id="team_images" name="team_images[]" accept="image/*" multiple>
         </div>
 
         <button type="submit" class="btn btn-primary w-100">登録する</button>

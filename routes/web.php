@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\TeamScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/inquiries', [InquiryController::class, 'index'])->name('inquiry.index');
     Route::patch('/inquiries/{inquiry}/toggle-status', [InquiryController::class, 'toggleStatus'])->name('inquiries.toggleStatus');
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+    Route::get('/teams/{team}/schedules', [TeamScheduleController::class, 'index'])->name('teams.schedules.index');
+    Route::post('/teams/{team}/schedules', [TeamScheduleController::class, 'store'])->name('teams.schedules.store');
+    Route::delete('/schedules/{schedule}', [TeamScheduleController::class, 'destroy'])->name('schedules.destroy');
 
 });
 

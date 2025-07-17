@@ -4,63 +4,60 @@
 
 @section('content')
 <div class="container py-5">
-    @if (Auth::check())
-        <a href="{{ route('teams.edit', $team->id) }}" class="btn btn-primary mb-4">チームを編集する</a>
-    @endif
 
     {{-- メインレイアウト：左＝画像 / 右＝紹介 --}}
-    <div class="row g-4 mb-5 align-items-start">
-        {{-- 左：カルーセル --}}
-        <div class="col-12 col-lg-6">
-            <div id="teamCarousel" class="carousel slide shadow-sm rounded" data-bs-ride="carousel">
-                <div class="carousel-inner" style="max-height: 500px; overflow: hidden;">
-                    @if ($team->images->isNotEmpty())
-                        @foreach ($team->images as $i => $img)
-                            <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                                <img
-                                    src="{{ asset('storage/' . $img->image_path) }}"
-                                    class="d-block w-100"
-                                    style="object-fit: cover; height: 500px;"
-                                    alt="{{ $img->caption ?? 'チーム画像' }}"
-                                >
-                                @if ($img->caption)
-                                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded py-2 px-3">
-                                        <p class="mb-0 text-white small">{{ $img->caption }}</p>
-                                    </div>
-                                @endif
-                            </div>
-                        @endforeach
-                    @else
-                        @for ($i = 1; $i <= 3; $i++)
-                            <div class="carousel-item {{ $i === 1 ? 'active' : '' }}">
-                                <img
-                                    src="{{ asset('sample_images/sample' . $i . '.png') }}"
-                                    class="d-block w-100"
-                                    style="object-fit: cover; height: 500px;"
-                                    alt="サンプル画像{{ $i }}"
-                                >
-                            </div>
-                        @endfor
-                    @endif
-                </div>
-
-                @if ($team->images->count() > 1 || $team->images->isEmpty())
-                    <button class="carousel-control-prev" type="button" data-bs-target="#teamCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">前へ</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#teamCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">次へ</span>
-                    </button>
+    <div class="row g-4 mb-5">
+    {{-- 左：カルーセル --}}
+    <div class="col-12 col-lg-6">
+        <div id="teamCarousel" class="carousel slide shadow-sm rounded" data-bs-ride="carousel" style="height: 500px; overflow: hidden;">
+            <div class="carousel-inner h-100">
+                @if ($team->images->isNotEmpty())
+                    @foreach ($team->images as $i => $img)
+                        <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
+                            <img
+                                src="{{ asset('storage/' . $img->image_path) }}"
+                                class="d-block w-100"
+                                style="object-fit: cover; height: 500px;"
+                                alt="{{ $img->caption ?? 'チーム画像' }}"
+                            >
+                            @if ($img->caption)
+                                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded py-2 px-3">
+                                    <p class="mb-0 text-white small">{{ $img->caption }}</p>
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                @else
+                    @for ($i = 1; $i <= 3; $i++)
+                        <div class="carousel-item {{ $i === 1 ? 'active' : '' }}">
+                            <img
+                                src="{{ asset('sample_images/sample' . $i . '.png') }}"
+                                class="d-block w-100"
+                                style="object-fit: cover; height: 500px;"
+                                alt="サンプル画像{{ $i }}"
+                            >
+                        </div>
+                    @endfor
                 @endif
             </div>
+
+               @if ($team->images->count() > 1 || $team->images->isEmpty())
+                <button class="carousel-control-prev" type="button" data-bs-target="#teamCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">前へ</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#teamCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">次へ</span>
+                </button>
+            @endif
         </div>
+    </div>
 
         {{-- 右：チーム紹介 --}}
         <div class="col-12 col-lg-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
+            <div class="card shadow-sm" style="height: 500px;">
+                <div class="card-body overflow-auto">
                     <h2 class="card-title">{{ $team->name }}</h2>
                     <p class="text-muted mb-2">📍 {{ $team->prefecture->name }} {{ $team->city }}</p>
                     <p><strong>対象学年:</strong> {{ $team->grade_range }}</p>
@@ -88,6 +85,40 @@
             @endforeach
         </div>
     @endif
+
+    {{-- チームスケジュール --}}
+    @if ($team->schedules->isNotEmpty())
+        <h5 class="mt-5 mb-3">📅 今後のスケジュール</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>日付</th>
+                        <th>時間</th>
+                        <th>内容</th>
+                        <th>備考</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($team->schedules as $schedule)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($schedule->date)->locale('ja')->isoFormat('YYYY年M月D日（ddd）') }}</td>
+                            <td>
+                                @if ($schedule->start_time && $schedule->end_time)
+                                    {{ \Carbon\Carbon::parse($schedule->start_time)->format('H:i') }}〜{{ \Carbon\Carbon::parse($schedule->end_time)->format('H:i') }}
+                                @else
+                                    ー
+                                @endif
+                            </td>
+                            <td>{{ $schedule->title }}</td>
+                            <td class="small text-muted">{{ $schedule->memo }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
 
     {{-- 📩 お問い合わせフォーム --}}
     <div class="card shadow-sm mt-5">

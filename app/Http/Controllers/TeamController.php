@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Prefecture;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use App\Models\TeamImage;
 
 class TeamController extends Controller
 {
@@ -66,11 +68,26 @@ class TeamController extends Controller
             'prefecture_id' => 'required|exists:prefectures,id',
             'grade_range' => 'required|string|max:255',
             'practice_days' => 'required|array',
+            'team_images.*' => 'nullable|image|max:2048',
         ]);
 
         $team = new Team($request->all());
-        $team->user_id = Auth::id(); // 所有者をセット
+        $team->user_id = Auth::id();
         $team->save();
+
+        // チーム画像保存
+        if ($request->hasFile('team_images')) {
+            foreach ($request->file('team_images') as $index => $imageFile) {
+                $path = $imageFile->store('team_images', 'public');
+        
+                TeamImage::create([
+                    'team_id' => $team->id,
+                    'image_path' => $path,
+                    'caption' => '',
+                    'order' => $index + 1,
+                ]);
+            }
+        }
 
         return redirect()->route('teams.show', $team->id);
     }
@@ -99,9 +116,29 @@ class TeamController extends Controller
             'prefecture_id' => 'required|exists:prefectures,id',
             'grade_range' => 'required|string|max:255',
             'practice_days' => 'required|array',
+            'team_images.*' => 'nullable|image|max:2048',
         ]);
 
         $team->update($request->all());
+
+        // チーム画像保存
+        if ($request->hasFile('team_images')) {
+            // 既存のチーム画像を削除
+            TeamImage::where('team_id', $team->id)->delete();
+
+            // 新しいチーム画像を保存
+            foreach ($request->file('team_images') as $index => $imageFile) {
+                $path = $imageFile->store('team_images', 'public');
+        
+                TeamImage::create([
+                    'team_id' => $team->id,
+                    'image_path' => $path,
+                    'caption' => '',
+                    'order' => $index + 1,
+                ]);
+            }
+        }
+
         return redirect()->route('teams.show', $team->id);
     }
 

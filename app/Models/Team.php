@@ -43,5 +43,10 @@ class Team extends Model
     {
         return $this->hasMany(Inquiry::class);
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(TeamSchedule::class)->orderBy('date');
+    }
     
 }
