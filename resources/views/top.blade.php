@@ -96,11 +96,7 @@
                         <div class="mb-2">
                             <span class="badge bg-secondary">
                                 練習日:
-                                @if (is_array($team->practice_days))
-                                    {{ implode('・', $team->practice_days) }}
-                                @else
-                                    {{ $team->practice_days }}
-                                @endif
+                                {{ implode('・', is_array($team->practice_days) ? $team->practice_days : json_decode($team->practice_days, true)) }}
                             </span>
                         </div>
                         <p class="card-text small text-muted">{{ Str::limit($team->introduction, 60) }}</p>
